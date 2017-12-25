@@ -1,3 +1,16 @@
+# create-ansible-user.yml
+#
+# Author:   Rick Hofstede
+#
+# This playbook is kind of a bootstrapping playbook; it creates an `ansible`
+# user that features all the necessary properties and  configurations. It should
+# be executed as a user with `sudo` permissions.
+#
+# Example execution command:
+#
+# ansible-playbook -u <user> --ask-pass --ask-sudo-pass create-ansible-user.yml
+#
+
 ---
 - hosts: all
   sudo: true
