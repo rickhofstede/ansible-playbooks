@@ -13,6 +13,14 @@
         groups: "{{ usergroups }}"
         createhome: no
 
+    # http://docs.ansible.com/ansible/lineinfile_module.html
+    - name: Allow user `ansible` to use `sudo` with no password
+      lineinfile:
+        destfile: /etc/sudoers
+        insertafter: "# User privilege specification"
+        line: "{{ username }}\tALL=(ALL:ALL) NOPASSWD:ALL"
+        validate: "visudo -cf %s"
+
     # http://docs.ansible.com/ansible/file_module.html
     - name: Create `.ssh` directory
       file:
