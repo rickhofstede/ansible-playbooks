@@ -3,12 +3,14 @@
   sudo: true
   vars:
     username: ansible
+    usergroups: adm
 
   tasks:
     # http://docs.ansible.com/ansible/user_module.html
     - name: Create `ansible` user
       user:
         name: "{{ username }}"
+        groups: "{{ usergroups }}"
         createhome: no
 
     # http://docs.ansible.com/ansible/file_module.html
