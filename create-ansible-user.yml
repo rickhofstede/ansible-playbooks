@@ -24,7 +24,7 @@
       user:
         name: "{{ username }}"
         groups: "{{ usergroups }}"
-        createhome: no
+        createhome: true
 
     # http://docs.ansible.com/ansible/lineinfile_module.html
     - name: Allow user `ansible` to use `sudo` with no password
