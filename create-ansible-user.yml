@@ -21,6 +21,29 @@
         line: "{{ username }}\tALL=(ALL:ALL) NOPASSWD:ALL"
         validate: "visudo -cf %s"
 
+    # http://docs.ansible.com/ansible/shell_module.html
+    - name: Retrieve sshd(8) `AllowUsers` configuration
+      shell: grep AllowUsers /etc/ssh/sshd_config
+      register: allowusers
+      ignore_errors: true  # Avoid failure if grep returns `1` (String not found)
+
+    # http://docs.ansible.com/ansible/lineinfile_module.html
+    # http://stackoverflow.com/questions/31432367/ansible-insert-a-single-word-on-an-existing-line-in-a-file
+    - name: Add user `ansible` to sshd(8) `AllowUsers`
+      lineinfile:
+        destfile: /etc/ssh/sshd_config
+        regexp: '^AllowUsers'
+        line: "{{ allowusers.stdout }} {{ username }}"
+      when: not "{{ allowusers.stdout }}" == "" and "{{ username }}" not in "{{ allowusers.stdout }}"
+      register: sshd_config
+
+    # http://docs.ansible.com/ansible/service_module.html
+    - name: Restart `sshd` service
+      service:
+        name: ssh
+        state: reloaded
+      when: sshd_config.changed
+
     # http://docs.ansible.com/ansible/file_module.html
     - name: Create `.ssh` directory
       file:
