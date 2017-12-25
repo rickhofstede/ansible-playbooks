@@ -1,0 +1,11 @@
+---
+- hosts: all
+  sudo: true
+
+  tasks:
+    # http://docs.ansible.com/ansible/apt_module.html
+    - name: Update package tree and dist-upgrade packages
+      apt:
+        upgrade: "dist"
+        update_cache: yes
+        cache_valid_time: 86400 # One day
